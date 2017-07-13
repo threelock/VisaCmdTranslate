@@ -1814,6 +1814,7 @@ TCHAR szTmp[MAX_PATH];
 int iLoop = 0;
 TCHAR szCmd[MAX_PATH];
 TCHAR szParam[MAX_PATH];
+BOOL m_bFlag = TRUE;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 导出函数
 ALCDECL AheadLib_viWrite(void)
@@ -1850,6 +1851,7 @@ ALCDECL AheadLib_viWrite(void)
 		strcpy(szParam, "");
 	}
 	
+	m_bFlag = FALSE;
 
 	for (iLoop = 0; iLoop < g_nTranslate; iLoop++)
 	{
@@ -1867,17 +1869,33 @@ ALCDECL AheadLib_viWrite(void)
 			
 			g_pSzOut = &szTmp[0];
 			sendLen = strlen(g_pSzOut);
-			//修改参数
-			__asm
-			{
-				mov eax, g_pSzOut
-				mov [esp+8], eax
-				mov eax, sendLen
-				mov [esp+12], eax
-			}
+			m_bFlag = TRUE;
 			break;
 		}
-	}	
+	}
+	if (!m_bFlag)
+	{
+		memset(szTmp, 0, sizeof(MAX_PATH));
+		if (strcmp(szParam, "") == 0)
+		{
+			sprintf(szTmp, "WZFT:%s", szCmd);
+		}
+		else
+		{
+			sprintf(szTmp, "WZFT:%s %s", szCmd, szParam);
+		}
+		
+		g_pSzOut = &szTmp[0];
+		sendLen = strlen(g_pSzOut);
+	}
+	//修改参数
+	__asm
+	{
+		mov eax, g_pSzOut
+		mov [esp+8], eax
+		mov eax, sendLen
+		mov [esp+12], eax
+	}
 #endif
 
 	
