@@ -1878,11 +1878,11 @@ ALCDECL AheadLib_viWrite(void)
 		memset(szTmp, 0, sizeof(MAX_PATH));
 		if (strcmp(szParam, "") == 0)
 		{
-			sprintf(szTmp, "WZFT:%s", szCmd);
+			sprintf(szTmp, "WZKT:%s", szCmd);
 		}
 		else
 		{
-			sprintf(szTmp, "WZFT:%s %s", szCmd, szParam);
+			sprintf(szTmp, "WZKT:%s %s", szCmd, szParam);
 		}
 		
 		g_pSzOut = &szTmp[0];
